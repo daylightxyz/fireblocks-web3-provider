@@ -887,7 +887,7 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
             payload: res.error.payload,
           });
         } else {
-          return res.result;
+          return res;
         }
       });
   }
