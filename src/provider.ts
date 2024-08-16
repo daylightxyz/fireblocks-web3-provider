@@ -869,12 +869,27 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
       }
     );
 
-    return util.promisify<any, any>(super.send).bind(this)({
-      id: 1,
-      jsonrpc: "2.0",
-      method: "eth_sendRawTransaction",
-      params: [signedSerializedTransaction],
-    });
+    return util
+      .promisify<any, any>(super.send)
+      .bind(this)({
+        id: 1,
+        jsonrpc: "2.0",
+        method: "eth_sendRawTransaction",
+        params: [signedSerializedTransaction],
+      })
+      .then((res) => {
+        console.log("Response from rawsigning: ", JSON.stringify(res));
+        if (res?.error) {
+          throw this.createError({
+            message: res.error.message,
+            code: res.error.code,
+            data: res.error.data,
+            payload: res.error.payload,
+          });
+        } else {
+          return res.result;
+        }
+      });
   }
 
   private async createPersonalSign(
