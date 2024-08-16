@@ -58,6 +58,9 @@ export enum ChainId {
   FLARE = 14,
   MANTLE = 5000,
   MANTLE_TEST = 5001,
+
+  // DAYLIGHT-added
+  ZORA = 7777777,
 }
 
 export enum ApiBaseUrl {

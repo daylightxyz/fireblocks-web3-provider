@@ -1,8 +1,8 @@
 {
   "name": "@fireblocks/fireblocks-web3-provider",
   "version": "1.3.8",
-  "description": "EIP-1193 Compatible Ethereum provider for Fireblocks",
-  "repository": "github:fireblocks/fireblocks-web3-provider",
+  "description": "Daylight version: EIP-1193 Compatible Ethereum provider for Fireblocks",
+  "repository": "github:daylightxyz/fireblocks-web3-provider",
   "author": "Fireblocks",
   "license": "MIT",
   "main": "dist/src/index.js",
@@ -29,13 +29,9 @@
     "build": "tsc",
     "watch": "tsc -w",
     "prepublishOnly": "npm run build",
-    "generate-types": "npx typechain --target=ethers-v5 --out-dir src/contracts 'src/abi/*.json'"
+    "generate-types": "npx typechain --target=ethers-v5 --out-dir src/contracts 'src/abi/*.json'",
+    "prepare": "npm run build"
   },
-  "files": [
-    "dist/",
-    "LICENSE",
-    "README.md"
-  ],
   "devDependencies": {
     "@typechain/ethers-v5": "^10.2.0",
     "@types/chai": "4.3.1",
