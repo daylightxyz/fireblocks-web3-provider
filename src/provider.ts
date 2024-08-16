@@ -809,6 +809,29 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
       nonce = transaction.nonce.startsWith("0x")
         ? parseInt(transaction.nonce, 16)
         : parseInt(transaction.nonce, 10);
+    } else {
+      nonce = Number(
+        await util
+          .promisify<any, any>(super.send)
+          .bind(this)({
+            id: 1,
+            jsonrpc: "2.0",
+            method: "eth_getTransactionCount",
+            params: [transaction.from, "latest"],
+          })
+          .then((res) => {
+            if (res?.error) {
+              throw this.createError({
+                message: res.error.message,
+                code: res.error.code,
+                data: res.error.data,
+                payload: res.error.payload,
+              });
+            } else {
+              return res.result;
+            }
+          })
+      );
     }
 
     const unsignedTransaction: ethers.UnsignedTransaction = {
@@ -878,7 +901,6 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
         params: [signedSerializedTransaction],
       })
       .then((res) => {
-        console.log("Response from rawsigning: ", JSON.stringify(res));
         if (res?.error) {
           throw this.createError({
             message: res.error.message,
@@ -887,7 +909,7 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
             payload: res.error.payload,
           });
         } else {
-          return res;
+          return res.result;
         }
       });
   }
