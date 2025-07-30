@@ -199,7 +199,7 @@ export const ASSETS: { [key: string]: Asset } = {
   [ChainId.ZORA]: { assetId: "ZORA_ETH", rpcUrl: "https://rpc.zora.energy/" },
   [ChainId.ZERO]: {
     assetId: "ZERO_ETH",
-    rpcUrl: "https://zero-network.calderaexplorer.xyz/api/eth-rpc",
+    rpcUrl: "https://rpc.zerion.io/v1/zero",
   },
 };
 
