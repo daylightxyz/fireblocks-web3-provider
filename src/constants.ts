@@ -2,7 +2,10 @@ import { TransactionStatus } from "fireblocks-sdk";
 import { ChainId, Asset } from "./types";
 
 export const ASSETS: { [key: string]: Asset } = {
-  [ChainId.MAINNET]: { assetId: "ETH", rpcUrl: "https://cloudflare-eth.com" },
+  [ChainId.MAINNET]: {
+    assetId: "ETH",
+    rpcUrl: "https://mainnet.gateway.tenderly.co/5gJwZC5eZmDBzreBF2ubyt",
+  },
   [ChainId.ROPSTEN]: {
     assetId: "ETH_TEST",
     rpcUrl: "https://rpc.ankr.com/eth_ropsten",
@@ -37,7 +40,7 @@ export const ASSETS: { [key: string]: Asset } = {
   },
   [ChainId.POLYGON]: {
     assetId: "MATIC_POLYGON",
-    rpcUrl: "https://polygon-rpc.com",
+    rpcUrl: "https://polygon.gateway.tenderly.co/7eWY51QWlu7vTf9chF0hRn",
   },
   [ChainId.POLYGON_TEST]: {
     assetId: "MATIC_POLYGON_MUMBAI",
@@ -69,7 +72,7 @@ export const ASSETS: { [key: string]: Asset } = {
   },
   [ChainId.ARBITRUM]: {
     assetId: "ETH-AETH",
-    rpcUrl: "https://rpc.ankr.com/arbitrum",
+    rpcUrl: "https://arbitrum.gateway.tenderly.co/5KBbFJ2IoIji5yX93GlvcS",
   },
   [ChainId.ARBITRUM_SEPOLIA]: {
     assetId: "ETH-AETH_SEPOLIA",
@@ -96,7 +99,7 @@ export const ASSETS: { [key: string]: Asset } = {
   },
   [ChainId.OPTIMISM]: {
     assetId: "ETH-OPT",
-    rpcUrl: "https://rpc.ankr.com/optimism",
+    rpcUrl: "https://optimism.gateway.tenderly.co/55CLkbgwV1fee5lpWQqIQx",
   },
   [ChainId.OPTIMISM_KOVAN]: {
     assetId: "ETH-OPT_KOV",
@@ -160,7 +163,7 @@ export const ASSETS: { [key: string]: Asset } = {
   [ChainId.XDC]: { assetId: "XDC", rpcUrl: "https://rpc.xdcrpc.com" },
   [ChainId.BASE]: {
     assetId: "BASECHAIN_ETH",
-    rpcUrl: "https://mainnet.base.org",
+    rpcUrl: "https://base.gateway.tenderly.co/4FRJ58WlSPln5JBjY8GXGG",
   },
   [ChainId.BASE_SEPOLIA]: {
     assetId: "BASECHAIN_ETH_TEST5",
