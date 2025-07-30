@@ -259,8 +259,8 @@ export class FireblocksWeb3Provider extends HttpProvider {
     }
   }
 
-  private isZora() {
-    return this.chainId === ChainId.ZORA;
+  private isBlindSigningChain() {
+    return [ChainId.ZORA, ChainId.ZERO].includes(this.chainId!);
   }
 
   private async populateAccounts() {
@@ -279,7 +279,7 @@ export class FireblocksWeb3Provider extends HttpProvider {
       try {
         depositAddresses = await this.fireblocksApiClient.getPaginatedAddresses(
           vaultAccountId.toString(),
-          this.isZora()
+          this.isBlindSigningChain()
             ? getAssetByChain(ChainId.MAINNET).assetId
             : this.assetId!
         );
@@ -422,7 +422,7 @@ export class FireblocksWeb3Provider extends HttpProvider {
           case "eth_sendTransaction":
             await this.gaslessGasTankAddressPopulatedPromise();
             try {
-              if (this.isZora()) {
+              if (this.isBlindSigningChain()) {
                 result = await this.createRawSignedTransaction(
                   payload.params[0]
                 );
@@ -447,7 +447,7 @@ export class FireblocksWeb3Provider extends HttpProvider {
 
           case "personal_sign":
           case "eth_sign":
-            result = this.isZora()
+            result = this.isBlindSigningChain()
               ? await this.createRawSign(
                   payload.params[1],
                   payload.params[0],
@@ -465,7 +465,7 @@ export class FireblocksWeb3Provider extends HttpProvider {
           case "eth_signTypedData_v1":
           case "eth_signTypedData_v3":
           case "eth_signTypedData_v4":
-            result = this.isZora()
+            result = this.isBlindSigningChain()
               ? await this.createRawSign(
                   payload.params[0],
                   payload.params[1],
