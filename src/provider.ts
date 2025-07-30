@@ -803,6 +803,8 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
 
     let nonce: number | undefined = undefined;
 
+    const ethersProvider = new ethers.providers.Web3Provider(this);
+
     if (typeof transaction.nonce === "number") {
       nonce = transaction.nonce;
     } else if (typeof transaction.nonce === "string") {
@@ -810,28 +812,16 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
         ? parseInt(transaction.nonce, 16)
         : parseInt(transaction.nonce, 10);
     } else {
-      nonce = Number(
-        await util
-          .promisify<any, any>(super.send)
-          .bind(this)({
-            id: 1,
-            jsonrpc: "2.0",
-            method: "eth_getTransactionCount",
-            params: [transaction.from, "latest"],
-          })
-          .then((res) => {
-            if (res?.error) {
-              throw this.createError({
-                message: res.error.message,
-                code: res.error.code,
-                data: res.error.data,
-                payload: res.error.payload,
-              });
-            } else {
-              return res.result;
-            }
-          })
-      );
+      nonce = await ethersProvider
+        .getTransactionCount(transaction.from, "latest")
+        .catch((error) => {
+          throw this.createError({
+            message: error.message,
+            code: error.code,
+            data: error.data,
+            payload: error.payload,
+          });
+        });
     }
 
     const unsignedTransaction: ethers.UnsignedTransaction = {
@@ -846,6 +836,26 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
       maxFeePerGas: transaction.maxFeePerGas,
       maxPriorityFeePerGas: transaction.maxPriorityFeePerGas,
     };
+
+    if (!unsignedTransaction.maxFeePerGas) {
+      const [block, eth_maxPriorityFeePerGas] = await Promise.all([
+        ethersProvider.getBlock("latest"),
+        ethersProvider.send("eth_maxPriorityFeePerGas", []),
+      ]);
+
+      if (block && block.baseFeePerGas) {
+        const maxPriorityFeePerGas = ethers.BigNumber.from(
+          eth_maxPriorityFeePerGas
+        );
+        if (maxPriorityFeePerGas) {
+          unsignedTransaction.type = 2;
+          unsignedTransaction.maxFeePerGas = block.baseFeePerGas
+            .mul(2)
+            .add(maxPriorityFeePerGas);
+          unsignedTransaction.maxPriorityFeePerGas = maxPriorityFeePerGas;
+        }
+      }
+    }
 
     console.log(
       "Raw-signed transaction",
