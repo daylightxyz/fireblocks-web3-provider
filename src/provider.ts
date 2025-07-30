@@ -847,6 +847,11 @@ Available addresses: ${Object.values(this.accounts).join(", ")}.`,
       maxPriorityFeePerGas: transaction.maxPriorityFeePerGas,
     };
 
+    console.log(
+      "Raw-signed transaction",
+      JSON.stringify(unsignedTransaction, undefined, 2)
+    );
+
     const serializedTransaction = serializeTransaction(unsignedTransaction);
 
     const transactionArguments: TransactionArguments = {
